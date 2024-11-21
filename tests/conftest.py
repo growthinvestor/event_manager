@@ -257,7 +257,7 @@ def user_response_data():
         "updated_at": datetime.now(),
         "links": []
     }
-
+#Token Fixture for login request
 @pytest.fixture
 def login_request_data():
     return {"username": "john_doe_123", "password": "SecurePassword123!"}
@@ -274,7 +274,7 @@ async def admin_token(admin_user):
     token_data = {"sub": str(admin_user.id), "role": "ADMIN"}
     return create_access_token(data=token_data)
 
-# Token for manager_user Fixture..
+# Token for manager_user Fixture
 @pytest.fixture
 async def manager_token(manager_user):
     token_data = {"sub": str(manager_user.id), "role": "MANAGER"}
