@@ -13,7 +13,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        python-version: [3.10.12] # Define Python versions here
+        python-version: [3.10.12]  # Define Python versions here
     services:
       postgres:
         image: postgres:latest
@@ -45,6 +45,16 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r requirements.txt
           
+      - name: Set environment variables
+        run: |
+          echo "smtp_server=${{ secrets.SMTP_SERVER }}" >> .env
+          echo "smtp_port=${{ secrets.SMTP_PORT }}" >> .env
+          echo "smtp_username=${{ secrets.SMTP_USERNAME }}" >> .env
+          echo "smtp_password=${{ secrets.SMTP_PASSWORD }}" >> .env
+
+      - name: Debug environment
+        run: cat .env  # Optional: Debugging to ensure variables are loaded (remove in production)
+
       - name: Run tests with Pytest
         env:
           DATABASE_URL: postgresql+asyncpg://user:password@localhost:5432/myappdb  # Configure the DATABASE_URL environment variable for tests
@@ -70,8 +80,8 @@ jobs:
         uses: docker/build-push-action@v5
         with:
           push: true
-          tags: amanjaswal/homework10:${{ github.sha }} # Uses the Git SHA for tagging
-          platforms: linux/amd64,linux/arm64 # Multi-platform support
+          tags: amanjaswal/homework10:${{ github.sha }}  # Uses the Git SHA for tagging
+          platforms: linux/amd64,linux/arm64  # Multi-platform support
           cache-from: type=registry,ref=amanjaswal/homework10:cache
           cache-to: type=inline,mode=max
           
@@ -80,6 +90,6 @@ jobs:
         with:
           image-ref: 'amanjaswal/homework10:${{ github.sha }}'
           format: 'table'
-          exit-code: '1' # Fail the job if vulnerabilities are found
+          exit-code: '1'  # Fail the job if vulnerabilities are found
           ignore-unfixed: true
           severity: 'CRITICAL,HIGH'
