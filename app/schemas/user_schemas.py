@@ -51,7 +51,7 @@ class UserUpdate(BaseModel):
     @root_validator(pre=True)
     def check_at_least_one_value(cls, values):
         if not any(values.values()):
-            raise ValueError("At least one field must be provided for update")
+            raise ValueError("At least one field must be provided for the update")
         return values
 
 class UserResponse(UserBase):
